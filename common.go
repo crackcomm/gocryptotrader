@@ -249,6 +249,7 @@ func SendHTTPGetRequest(url string, jsonDecode bool, result interface{}) (err er
 	}
 
 	defer res.Body.Close()
+	//log.Println(string(contents)) //turn off spam plz
 
 	if jsonDecode {
 		err := JSONDecode(contents, &result)

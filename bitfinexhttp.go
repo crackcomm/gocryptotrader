@@ -239,6 +239,15 @@ func (b *Bitfinex) Run() {
 		log.Printf("%s polling delay: %ds.\n", b.GetName(), b.RESTPollingDelay)
 		log.Printf("%s %d currencies enabled: %s.\n", b.GetName(), len(b.EnabledPairs), b.EnabledPairs)
 	}
+	/*
+		rawr, err := b.GetTicker("BTCUSD", url.Values{})
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(rawr)
+	*/
+	for {
+	}
 
 	if b.Websocket {
 		go b.WebsocketClient()
@@ -324,16 +333,16 @@ type BitfinexLendbook struct {
 	Asks []BitfinexLendbookBidAsk `json:"asks"`
 }
 
-func (b *Bitfinex) GetStats(symbol string) (BitfinexStats, error) {
-	response := BitfinexStats{}
-	err := SendHTTPGetRequest(BITFINEX_API_URL+BITFINEX_STATS+symbol, true, &response)
+func (b *Bitfinex) GetStats(symbol string) ([]BitfinexStats, error) {
+	response := []BitfinexStats{}
+	err := SendHTTPGetRequest(BITFINEX_API_URL+BITFINEX_STATS+symbol, true, &response) //This was unmarshalling multiple values
 	if err != nil {
 		return response, err
 	}
 	return response, nil
 }
 
-func (b *Bitfinex) GetLendbook(symbol string, values url.Values) (BitfinexLendbook, error) {
+func (b *Bitfinex) GetLendbook(symbol string, values url.Values) (BitfinexLendbook, error) { //issues with symbol -- BTCUSD return 200 code but BTC returning values
 	path := EncodeURLValues(BITFINEX_API_URL+BITFINEX_LENDBOOK+symbol, values)
 	response := BitfinexLendbook{}
 	err := SendHTTPGetRequest(path, true, &response)
@@ -370,7 +379,7 @@ type BitfinexLends struct {
 	Timestamp  int64   `json:"timestamp"`
 }
 
-func (b *Bitfinex) GetLends(symbol string, values url.Values) ([]BitfinexLends, error) {
+func (b *Bitfinex) GetLends(symbol string, values url.Values) ([]BitfinexLends, error) { //status code was no 200 with symbol
 	path := EncodeURLValues(BITFINEX_API_URL+BITFINEX_LENDS+symbol, values)
 	response := []BitfinexLends{}
 	err := SendHTTPGetRequest(path, true, &response)

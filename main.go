@@ -1,6 +1,7 @@
 package main
 
 import (
+	//	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"os"
@@ -59,6 +60,16 @@ func setupBotExchanges() {
 }
 
 func main() {
+	//-------------------------------------WEBSERVER TEST AREA-------------------------------------------//
+	/*go WebsocketHandler()
+	r := mux.NewRouter()
+	r.HandleFunc("/", ServeTestIndex)
+	r.HandleFunc("/ws", WebsocketConn)
+	http.ListenAndServe(":8080", r)
+	*/
+
+	//-------------------------------------WEBSERVER TEST AREA-------------------------------------------//
+
 	HandleInterrupt()
 	log.Printf("Loading config file %s..\n", CONFIG_FILE)
 
